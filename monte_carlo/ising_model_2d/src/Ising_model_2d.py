@@ -1,29 +1,24 @@
-####################################
+#################################
 # Author: S. A. Owerre
 # Date modified: 01/01/2021
 # Class: Ising model
-####################################
+#################################
 import random
 import numpy as np
 from numpy.random import rand
 
 class Ising:
-    """
-    monte carlo simulation of 2D Ising model
-    """
+    """monte carlo simulation of 2D Ising model."""
+    
     def __init__(self, L, nwarmup, nsteps):
-        """
-        define default parameters
-        """
+        """define default parameters."""
         self.L = L # lattice size
         self.N = L*L # number of spins
         self.nwarmup = nwarmup # number of warm up step
         self.nsteps = nsteps # number of mc step
 
     def initialize(self):
-        """
-        random initialization of spin on the 2D square lattice 
-        """
+        """random initialization of spin on the 2D square lattice."""
         state = [[0]*self.L for _ in range(self.L)]
         for i in range(self.L):
             for j in range(self.L):
@@ -50,19 +45,14 @@ class Ising:
         return np_, nm
 
     def precom_expo(self, T):
-        """
-        precompute energy change when spin is flipped
-        """
+        """precompute energy change when spin is flipped."""
         res = [0]*17
         for de in range(-8,9,4):
             res[de+8] = np.exp(-de/T)
         return res
 
     def energy(self, spinconf):
-        """
-        total energy of a given spin
-        configuration
-        """
+        """total energy of a given spin configuration."""
         ene = 0
         np_, nm = self.neighbor_pos()
         for i in range(self.L):
@@ -73,10 +63,7 @@ class Ising:
         return ene/2 # to compensate for over-counting
         
     def magnetization(self, spinconf):
-        """
-        total magnetization of a given spin
-        configuration
-        """
+        """total magnetization of a given spin configuration."""
         mag = 0
         for i in range(self.L):
             for j in range(self.L):
@@ -84,9 +71,7 @@ class Ising:
         return mag
         
     def metropolis(self, spinconf, pw):
-        """
-        metropolis algorithm
-        """
+        """metropolis algorithm."""
         ene = self.energy(spinconf) # initial energy state
         mag = self.magnetization(spinconf) # initial magnetization
         np_, nm = self.neighbor_pos() # periodic boundary condition
@@ -105,9 +90,7 @@ class Ising:
         return ene, mag
 
     def mcsweeps(self, spinconf, pw):
-        """
-        perform monte-carlo sweeps
-        """
+        """perform monte-carlo sweeps."""
         avg = np.zeros(6) # initialize averages to zero
         for _ in range(self.nwarmup):   # equilibrate by warm up
             self.metropolis(spinconf, pw)

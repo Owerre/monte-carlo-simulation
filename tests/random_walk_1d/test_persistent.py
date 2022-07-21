@@ -5,7 +5,7 @@
 #############################################
 
 import sys
-base_path = '/Users/sowerre/Documents/python/'
+base_path = ''
 sys.path.append(base_path + 'monte-carlo/monte_carlo/random_walk_1d/src/')
 import persistent_random_walk_1d as walk
 
