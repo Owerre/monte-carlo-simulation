@@ -27,8 +27,8 @@ def test_ising():
     assert len(nm) == model.L
 
     # test precom_expo method
-    res = model.precom_expo(0.1)
-    assert len(res) == 17
+    pw = model.precom_expo(0.1)
+    assert len(pw) == 17
 
     # test energy method
     spinconf = model.initialize()
@@ -40,7 +40,6 @@ def test_ising():
     assert mag != 0
 
     # test metropolis method
-    pw = model.precom_expo(0.1)
     ene, mag = model.metropolis(spinconf, pw)
     assert ene != 0
     assert mag != 0
