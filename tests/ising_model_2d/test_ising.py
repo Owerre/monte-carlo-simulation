@@ -18,8 +18,8 @@ def test_ising():
     assert model.nsteps == 100
 
     # test initialize method
-    state = model.initialize()
-    assert len(state) == model.L
+    spinconf = model.initialize()
+    assert len(spinconf) == model.L
 
     # test neighbor_pos method
     np_, nm = model.neighbor_pos()
@@ -31,7 +31,6 @@ def test_ising():
     assert len(pw) == 17
 
     # test energy method
-    spinconf = model.initialize()
     ene = model.energy(spinconf)
     assert ene != 0
 
