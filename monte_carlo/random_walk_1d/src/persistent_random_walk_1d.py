@@ -7,14 +7,21 @@ import numpy as np
 from numpy.random import rand
 
 class PersistentRandomWalk1D:
-    """
-    monte carlo simulation of one-dimensional persistent random walk.
+    """monte carlo simulation of one-dimensional persistent random walk.
 
     inputs:
         (integer) ntrials: number of times to repeat the walk
         (integer) nsteps: number of steps to take in one trial
         (float) p: probability to step in the same direction as the previous step
         1-p: probability to step in the opposite direction to the previous step
+
+    outputs:
+        (1d array) x_arr: displacement
+        (dictionay) visited_sites: visisted sites and their count
+        (1d array) x_avg: average displacement
+        (1d array) sigma2: displacement variance
+        (integer) count: count the number of distinct sites visited
+        (1d array) mean_count: mean count the number of distinct sites visited
     """
     def __init__(self, nsteps, ntrials, p):
         """define parameters of the model."""
@@ -29,12 +36,14 @@ class PersistentRandomWalk1D:
         visited_sites = {}  # track visited sites and their count
 
         for i in range(self.ntrials):
-            dir = np.zeros(self.nsteps+1) # track the direction of the last step
+            # track the direction of the last step
+            dir = np.zeros(self.nsteps+1) 
             x = 0 # initial position
             dir[0] = 1 # initial (previous) direction
         
             for j in range(self.nsteps):
-                if rand() <= self.p: # step in the same direction as the previous step
+                # step in the same direction as the previous step
+                if rand() <= self.p: 
                     if dir[j] == 1:
                         x += 1 # step right
                         dir[j+1] = 1 # update direction of step
@@ -65,9 +74,11 @@ class PersistentRandomWalk1D:
 
     def sites_visited(self):
         """count the number of distinct sites visited 
-        during the course of n steps."""        
-        dir = np.zeros(self.nsteps+1) # track the direction of the last step
-        count = np.zeros(self.nsteps + 1) # track the no. of distinct visited sites 
+        during the course of n steps."""  
+        # track the direction of the last step      
+        dir = np.zeros(self.nsteps+1) 
+        # track the no. of distinct visited sites 
+        count = np.zeros(self.nsteps + 1) 
         visited_sites = {} # track visited sites
 
         x = 0 # initial position
@@ -76,7 +87,8 @@ class PersistentRandomWalk1D:
         visited_sites[0] = 1 # initial position already visited once
 
         for i in range(self.nsteps):
-            if rand() <= self.p: # step in the same direction as the previous step
+            # step in the same direction as the previous step
+            if rand() <= self.p: 
                 if dir[i] == 1:
                     x += 1 # step right
                     dir[i+1] = 1 # update direction of step

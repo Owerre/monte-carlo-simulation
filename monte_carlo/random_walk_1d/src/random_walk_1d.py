@@ -1,33 +1,36 @@
-####################################
+#############################
 # Author: S. A. Owerre
 # Date modified: 02/01/2021
 # Class: 1D Random Walk
-####################################
+############################
 import math
 import numpy as np
 from numpy.random import rand
 
 class RandomWalk1D:
-    """
-    monte carlo simulation of one-dimensional random walk
+    """monte carlo simulation of one-dimensional random walk.
 
     inputs:
         (integer) ntrials: number of times to repeat the walk
         (integer) nsteps: number of steps to take in one trial
         (float) p: probability to step to the right and 1-p to step left
+
+    outputs:
+        (1d array) x_arr: displacement
+        (dictionay) visited_sites: visisted sites and their count
+        (1d array) x_avg: average displacement
+        (1d array) sigma2: displacement variance
+        (integer) count: count the number of distinct sites visited
+        (1d array) mean_count: mean count the number of distinct sites visited
     """
     def __init__(self, nsteps, ntrials, p):
-        """
-        define parameters of the model
-        """
+        """define parameters of the model."""
         self.nsteps = nsteps
         self.ntrials = ntrials
         self.p = p
 
     def monte_carlo(self):
-        """
-        monte carlo simulation
-        """
+        """monte carlo simulation."""
         x_arr = np.zeros((self.ntrials, self.nsteps+1))
         x2_arr = np.zeros((self.ntrials, self.nsteps+1))
         visited_sites = {}  # map visited sites to count after n steps
@@ -54,8 +57,8 @@ class RandomWalk1D:
         return x_arr, visited_sites, x_avg, sigma2
     
     def sites_visited(self):
-        """
-        count the number of distinct sites visited during the course of n steps
+        """count the number of distinct sites visited 
+        during the course of n steps.
         """        
         count = np.zeros(self.nsteps + 1) # number of distinct visited sites 
         visited_sites = {} # # track visited sites and their count
@@ -80,9 +83,8 @@ class RandomWalk1D:
         return count
     
     def average_sites_visited(self):
-        """
-        compute the average number of distinct sites visited during 
-        the course of n steps over n trials or walkers
+        """compute the average number of distinct sites visited during 
+        the course of n steps over n trials or walkers.
         """
         arr = np.zeros((self.ntrials, self.nsteps +1))
         for i in range(self.ntrials):
@@ -92,10 +94,9 @@ class RandomWalk1D:
         return mean_count
     
     def exact_dist(self):
-        """
-        the exact probability P(x,n) that the displacement
+        """the exact probability P(x,n) that the displacement
         of the walker is x after n steps, given by the 
-        binomial distribution
+        binomial distribution.
         """
         _, hashmap, _, _ = self.monte_carlo()
         x_pos = list(hashmap.keys())
@@ -109,9 +110,8 @@ class RandomWalk1D:
         return x_pos, prob
 
     def gaussian_approx(self, const):
-        """
-        gaussian approximation of the position distribution 
-        for large n steps
+        """gaussian approximation of the position distribution 
+        for large n steps.
         """
         _, hashmap, _, _= self.monte_carlo()
         x_pos = list(hashmap.keys())
@@ -126,10 +126,8 @@ class RandomWalk1D:
         return x_pos, gau_prob
 
     def exact_enumeration(self):
-        """
-        evaluate averages by exactly enumerating all the possible walks 
+        """evaluate averages by exactly enumerating all the possible walks 
         for a given n steps at p = 0.5; there are 2**n possible walks.
-        
         note: this should be done for very small n steps
         """
         all_pos = [c for c in range(-self.nsteps, self.nsteps+1)]
@@ -143,11 +141,13 @@ class RandomWalk1D:
                 for _ in np.arange(bino_coeff):
                     actual_pos.append(x)
         
-        # compute averages            
-        x_avg = sum([x for x in actual_pos])/2**self.nsteps # 0 for p = 0.5
-        x2_avg = sum([x*x for x in actual_pos])/2**self.nsteps # nsteps for p = 0.5
+        # compute averages  
+        # 0 for p = 0.5          
+        x_avg = sum([x for x in actual_pos])/2**self.nsteps 
+        # nsteps for p = 0.5
+        x2_avg = sum([x*x for x in actual_pos])/2**self.nsteps 
         return actual_pos, x_avg, x2_avg
 
-if __name__ == "__main__":
-    walk = RandomWalk1D(nsteps=2, ntrials=100, p=0.5)
-    print(walk.exact_enumeration())
+# if __name__ == "__main__":
+#     walk = RandomWalk1D(nsteps=2, ntrials=100, p=0.5)
+#     print(walk.exact_enumeration())

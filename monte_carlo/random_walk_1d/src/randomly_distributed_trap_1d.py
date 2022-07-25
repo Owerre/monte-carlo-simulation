@@ -8,9 +8,8 @@ from numpy.random import rand
 import random
 
 class RandomlyDistributedTrap:
-    """
-    monte carlo simulation of one-dimensional random walk on lattices with 
-    randomly distributed traps
+    """monte carlo simulation of one-dimensional random walk 
+    on lattices with randomly distributed traps.
 
     inputs:
         (integer) ntrials: number of times to repeat the walk
@@ -18,6 +17,14 @@ class RandomlyDistributedTrap:
         (float) p: probability to step to the right and 1-p to step to the left
         (float) rho: trap concentration-the probability that a site is a trap site
         (integer) L: lattice size
+    
+    outputs:
+        (1d array) sites: lattice sites
+        (1d array) site_label: site label representing trap or non-trap sites
+        (1d array) traj: walker's trajectory
+        (integer) count: number of steps before being trapped
+        (1d array) proba_trap_config: probability configuration
+        (1d array) mean_proba: mean survival probability
     """
     def __init__(self, nsteps, ntrials, p, rho, L):
         """define parameters of the model."""
@@ -28,13 +35,11 @@ class RandomlyDistributedTrap:
         self.rho = rho
     
     def lattice(self, dtype=None):
-        """
-        lattice with randomly distributed sites and site label:
-        traps (0) and nontraps (1)
+        """lattice with randomly distributed sites and site label:
+        traps = 0 and nontraps = 1.
         """
         sites = np.zeros(self.L, dtype=dtype) # lattice sites
         site_label = np.zeros(self.L, dtype=dtype) # site labels
-
         for i in range(len(sites)):
             if rand() <= self.rho:
                 site_label[i] = 0 # trap label
@@ -45,8 +50,8 @@ class RandomlyDistributedTrap:
         return sites, site_label
 
     def step_count_b4_trap(self):
-        """
-        count the number of steps before being trapped at site_label[x] = 0
+        """count the number of steps before being trapped 
+        at site_label[x] = 0.
         """
         traj = [] # trajectory of the walker
         sites, site_label = self.lattice(dtype = int) # lattice with random traps
@@ -75,9 +80,8 @@ class RandomlyDistributedTrap:
         return traj, count
 
     def average_nsteps_trap(self):
-        """
-        mean number of steps before the walker is trapped; this is called the 
-        mean survival time or the mean first passage time.
+        """mean number of steps before the walker is trapped; 
+        this is called the mean survival time or the mean first passage time.
         """
         step_count = np.zeros(self.ntrials)
         for i in range(len(step_count)):
@@ -86,9 +90,8 @@ class RandomlyDistributedTrap:
         return np.mean(step_count)
 
     def neighbor_pos(self, dtype=None):
-        """
-        set up array for nearest neigbour positions 
-        with periodic boundary condition
+        """set up array for nearest neigbour positions 
+        with periodic boundary condition.
         """
         rp = np.zeros(self.L, dtype=dtype)
         lp = np.zeros(self.L, dtype=dtype)
@@ -102,9 +105,8 @@ class RandomlyDistributedTrap:
         return rp, lp
 
     def exact_enumeration_proba(self):
-        """
-        survival probability per trap configiration 
-        using exact enumeration
+        """survival probability per trap configiration 
+        using exact enumeration.
         """
         rp, lp = self.neighbor_pos(dtype=int) # periodic boundary condition
         _, site_label = self.lattice() # random trap configuration
@@ -123,9 +125,7 @@ class RandomlyDistributedTrap:
         return proba_trap_config
 
     def average_survival_proba(self):
-        """
-        mean survival probability over several trap configurations
-        """
+        """mean survival probability over several trap configurations."""
         arr = np.zeros((self.ntrials, self.nsteps+1))
         for i in range(self.ntrials):
             proba_trap_config = self.exact_enumeration_proba()

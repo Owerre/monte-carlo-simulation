@@ -7,28 +7,31 @@ import numpy as np
 from numpy.random import rand
 
 class RestrictedRandomWalk1D:
-    """
-    monte carlo simulation of one-dimensional restricted random walk
+    """monte carlo simulation of one-dimensional restricted random walk.
 
     inputs:
         (integer) ntrials: number of times to repeat the walk
         (integer) nsteps: number of steps to take in one trial
         (float) p: probability to step to the right and 1-p to step to the left
         (integer) L: lattice size
+    
+    outputs:
+        (1d array) x_arr: displacement
+        (dictionay) visited_sites: visisted sites and their count
+        (1d array) x_avg: average displacement
+        (1d array) sigma2: displacement variance
+        (integer) count: count the number of distinct sites visited
+        (1d array) mean_count: mean count the number of distinct sites visited
     """
     def __init__(self, nsteps, ntrials, p, L):
-        """
-        define parameters of the model
-        """
+        """define parameters of the model."""
         self.nsteps = nsteps
         self.ntrials = ntrials
         self.p = p
         self.L = L
 
     def step_count_b4_trap(self):
-        """
-        count the number of steps before being trapped at x = 0 and x = L
-        """
+        """count the number of steps before being trapped at x = 0 and x = L."""
         lat = [t for t in range(self.L+1)] # lattice sites
         traj = [] # trajectory of the walker
         x =  lat[self.L//2] # starting position
@@ -50,9 +53,8 @@ class RestrictedRandomWalk1D:
         return traj, count
 
     def average_nsteps_trap(self):
-        """
-        mean number of steps for the walker to be trapped,
-        this is called the mean first passage time
+        """mean number of steps for the walker to be trapped;
+        this is called the mean first passage time.
         """
         step_count = np.zeros(self.ntrials)
         for i in range(len(step_count)):
@@ -61,9 +63,7 @@ class RestrictedRandomWalk1D:
         return np.mean(step_count)
 
     def step_count_b4_trap0(self):
-        """
-        count when walker gets trapped at x = 0
-        """
+        """count when walker gets trapped at x = 0."""
         lat = [t for t in range(self.L+1)] # lattice sites
         x =  lat[self.L//2] # starting position
         count = 0 # count the number of times the walker hits x = 0
@@ -83,23 +83,18 @@ class RestrictedRandomWalk1D:
         return count
 
     def prob_trap(self):
-        """
-        probability of the walker being trapped at x = 0
-        """
+        """probability of the walker being trapped at x = 0."""
         count = 0
         for _ in range(self.ntrials):
             count += self.step_count_b4_trap0()
         return count/self.ntrials
     
     def reflecting_boundaries(self):
-        """
-        monte carlo simulation of reflected boundary random walk
-        """
+        """monte carlo simulation of reflected boundary random walk."""
         x_arr = np.zeros((self.ntrials, self.nsteps+1))
         x2_arr = np.zeros((self.ntrials, self.nsteps+1))
         visited_sites = {}  # track visited sites and their count
         lat = [t for t in range(-self.L, self.L+1)] # lattice sites
-
         for i in range(self.ntrials):
             x =  0 # initial position
             for j in range(self.nsteps):
@@ -128,8 +123,8 @@ class RestrictedRandomWalk1D:
         return x_arr, visited_sites, x_avg, sigma2
 
     def sites_visited(self):
-        """
-        count the number of distinct sites visited during the course of n steps
+        """count the number of distinct sites visited 
+        during the course of n steps.
         """        
         count = np.zeros(self.nsteps + 1) # number of distinct visited sites 
         visited_sites = {} # # track visited sites and their count
@@ -161,9 +156,8 @@ class RestrictedRandomWalk1D:
         return count
     
     def average_sites_visited(self):
-        """
-        compute the average number of distinct sites visited during 
-        the course of n steps over n trials or walkers
+        """compute the average number of distinct sites visited during 
+        the course of n steps over n trials or walkers.
         """
         arr = np.zeros((self.ntrials, self.nsteps +1))
         for i in range(self.ntrials):

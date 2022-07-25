@@ -7,30 +7,32 @@ import numpy as np
 from numpy.random import rand
 
 class TrueSelfAvoidingWalk1D:
-    """
-    monte carlo simulation of one-dimensional true self-avoiding walk
+    """monte carlo simulation of one-dimensional true self-avoiding walk.
 
     inputs:
         (integer) ntrials: number of times to repeat the walk
         (integer) nsteps: number of steps to take in one trial
         (float) g: strength with which the walk avoids itself
+    
+    outputs:
+        (1d array) x_arr: displacement
+        (dictionay) visited_sites: visisted sites and their count
+        (1d array) x_avg: average displacement
+        (1d array) sigma2: displacement variance
+        (integer) count: count the number of distinct sites visited
+        (1d array) mean_count: mean count the number of distinct sites visited
     """
     def __init__(self, nsteps, ntrials, g):
-        """
-        define parameters of the model
-        """
+        """define parameters of the model."""
         self.nsteps = nsteps
         self.ntrials = ntrials
         self.g = g
 
     def monte_carlo(self):
-        """
-        monte carlo simulation
-        """
+        """monte carlo simulation."""
         x_arr = np.zeros((self.ntrials, self.nsteps+1))
         x2_arr = np.zeros((self.ntrials, self.nsteps+1))
         visited_sites = {}  # map visited sites to count after n steps
-
         for i in range(self.ntrials):
             nv = np.zeros(2*self.nsteps+1) # track the number of visits to x
             x = 0 # initial position
@@ -59,11 +61,11 @@ class TrueSelfAvoidingWalk1D:
         return x_arr, visited_sites, x_avg, sigma2
 
     def sites_visited(self):
-        """
-        count the number of distinct sites visited during the course of n steps
+        """count the number of distinct sites visited 
+        during the course of n steps.
         """        
         nv = np.zeros(2*self.nsteps + 1) # track number of visits to x
-        count = np.zeros(self.nsteps + 1) # track number of distinct visited sites 
+        count = np.zeros(self.nsteps + 1) # track no. of distinct visited sites 
         visited_sites = {} # track visited sites
 
         x = 0 # initial position
@@ -91,9 +93,8 @@ class TrueSelfAvoidingWalk1D:
         return count
 
     def average_sites_visited(self):
-        """
-        compute the average number of distinct sites visited during 
-        the course of n steps over n trials or walkers
+        """compute the average number of distinct sites visited during 
+        the course of n steps over n trials or walkers.
         """
         arr = np.zeros((self.ntrials, self.nsteps +1))
         for i in range(self.ntrials):
