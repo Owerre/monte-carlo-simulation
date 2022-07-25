@@ -17,7 +17,7 @@ class RandomWalk1D:
 
     outputs:
         (1d array) x_arr: displacement
-        (dictionay) visited_sites: visisted sites and their count
+        (dictionary) visited_sites: visisted sites and their count
         (1d array) x_avg: average displacement
         (1d array) sigma2: displacement variance
         (integer) count: count the number of distinct sites visited
