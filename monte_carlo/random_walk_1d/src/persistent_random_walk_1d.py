@@ -14,20 +14,16 @@ class PersistentRandomWalk1D:
         (integer) ntrials: number of times to repeat the walk
         (integer) nsteps: number of steps to take in one trial
         (float) p: probability to step in the same direction as the previous step
-               1-p: probability to step in the opposite direction to the previous step
+        1-p: probability to step in the opposite direction to the previous step
     """
     def __init__(self, nsteps, ntrials, p):
-        """
-        define parameters of the model
-        """
+        """define parameters of the model."""
         self.nsteps = nsteps
         self.ntrials = ntrials
         self.p = p
 
     def monte_carlo(self):
-        """
-        monte carlo simulation
-        """
+        """monte carlo simulation."""
         x_arr = np.zeros((self.ntrials, self.nsteps+1))
         x2_arr = np.zeros((self.ntrials, self.nsteps+1))
         visited_sites = {}  # track visited sites and their count
@@ -68,9 +64,8 @@ class PersistentRandomWalk1D:
         return x_arr, visited_sites, x_avg, sigma2
 
     def sites_visited(self):
-        """
-        count the number of distinct sites visited during the course of n steps
-        """        
+        """count the number of distinct sites visited 
+        during the course of n steps."""        
         dir = np.zeros(self.nsteps+1) # track the direction of the last step
         count = np.zeros(self.nsteps + 1) # track the no. of distinct visited sites 
         visited_sites = {} # track visited sites
@@ -107,10 +102,8 @@ class PersistentRandomWalk1D:
         return count
 
     def average_sites_visited(self):
-        """
-        compute the average number of distinct sites visited during 
-        the course of n steps over n trials or walkers
-        """
+        """compute the average number of distinct sites visited during 
+        the course of n steps over n trials or walkers."""
         arr = np.zeros((self.ntrials, self.nsteps +1))
         for i in range(self.ntrials):
             count = self.sites_visited()

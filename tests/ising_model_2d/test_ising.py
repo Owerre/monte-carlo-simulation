@@ -5,7 +5,7 @@
 #####################################
 
 import sys
-base_path = '/Users/sowerre/Documents/python/'
+base_path = ''
 sys.path.append(base_path + 'monte-carlo/monte_carlo/ising_model_2d/src/')
 import Ising_model_2d as ising
 
