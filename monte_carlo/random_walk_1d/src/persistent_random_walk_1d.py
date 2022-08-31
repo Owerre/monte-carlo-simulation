@@ -6,6 +6,7 @@
 import numpy as np
 from numpy.random import rand
 
+
 class PersistentRandomWalk1D:
     """monte carlo simulation of one-dimensional persistent random walk.
 
@@ -23,6 +24,7 @@ class PersistentRandomWalk1D:
         (integer) count: count the number of distinct sites visited
         (1d array) mean_count: mean count the number of distinct sites visited
     """
+
     def __init__(self, nsteps, ntrials, p):
         """define parameters of the model."""
         self.nsteps = nsteps
@@ -31,94 +33,94 @@ class PersistentRandomWalk1D:
 
     def monte_carlo(self):
         """monte carlo simulation."""
-        x_arr = np.zeros((self.ntrials, self.nsteps+1))
-        x2_arr = np.zeros((self.ntrials, self.nsteps+1))
+        x_arr = np.zeros((self.ntrials, self.nsteps + 1))
+        x2_arr = np.zeros((self.ntrials, self.nsteps + 1))
         visited_sites = {}  # track visited sites and their count
 
         for i in range(self.ntrials):
             # track the direction of the last step
-            dir = np.zeros(self.nsteps+1) 
-            x = 0 # initial position
-            dir[0] = 1 # initial (previous) direction
-        
+            dir = np.zeros(self.nsteps + 1)
+            x = 0   # initial position
+            dir[0] = 1   # initial (previous) direction
+
             for j in range(self.nsteps):
                 # step in the same direction as the previous step
-                if rand() <= self.p: 
+                if rand() <= self.p:
                     if dir[j] == 1:
-                        x += 1 # step right
-                        dir[j+1] = 1 # update direction of step
+                        x += 1   # step right
+                        dir[j + 1] = 1   # update direction of step
                     else:
-                        x -= 1 # step left
-                        dir[j+1] = -1 # update direction of step
-            
+                        x -= 1   # step left
+                        dir[j + 1] = -1   # update direction of step
+
                 else:  # step in the opposite direction to the prevoius step
                     if dir[j] == 1:
                         x -= 1
-                        dir[j+1] = -1
+                        dir[j + 1] = -1
                     else:
                         x += 1
-                        dir[j+1] = 1
-                
+                        dir[j + 1] = 1
+
                 # update the position array at each n steps
-                x_arr[i][j+1] = x  
-                x2_arr[i][j+1] = x*x
-            
+                x_arr[i][j + 1] = x
+                x2_arr[i][j + 1] = x * x
+
             # update visited sites after n steps
-            visited_sites[x] = visited_sites.get(x,0) + 1
+            visited_sites[x] = visited_sites.get(x, 0) + 1
 
         # average over ntrials
-        x_avg = np.mean(x_arr, axis =0) 
-        x2_avg = np.mean(x2_arr, axis =0) 
-        sigma2 = x2_avg - x_avg*x_avg 
+        x_avg = np.mean(x_arr, axis=0)
+        x2_avg = np.mean(x2_arr, axis=0)
+        sigma2 = x2_avg - x_avg * x_avg
         return x_arr, visited_sites, x_avg, sigma2
 
     def sites_visited(self):
-        """count the number of distinct sites visited 
-        during the course of n steps."""  
-        # track the direction of the last step      
-        dir = np.zeros(self.nsteps+1) 
-        # track the no. of distinct visited sites 
-        count = np.zeros(self.nsteps + 1) 
-        visited_sites = {} # track visited sites
+        """count the number of distinct sites visited
+        during the course of n steps."""
+        # track the direction of the last step
+        dir = np.zeros(self.nsteps + 1)
+        # track the no. of distinct visited sites
+        count = np.zeros(self.nsteps + 1)
+        visited_sites = {}   # track visited sites
 
-        x = 0 # initial position
-        dir[0] = 1 # initial (previous) direction
-        count[0] = 1 # initial position counted as 1
-        visited_sites[0] = 1 # initial position already visited once
+        x = 0   # initial position
+        dir[0] = 1   # initial (previous) direction
+        count[0] = 1   # initial position counted as 1
+        visited_sites[0] = 1   # initial position already visited once
 
         for i in range(self.nsteps):
             # step in the same direction as the previous step
-            if rand() <= self.p: 
+            if rand() <= self.p:
                 if dir[i] == 1:
-                    x += 1 # step right
-                    dir[i+1] = 1 # update direction of step
+                    x += 1   # step right
+                    dir[i + 1] = 1   # update direction of step
                 else:
-                    x -= 1 # step left
-                    dir[i+1] = -1 # update direction of step
-        
+                    x -= 1   # step left
+                    dir[i + 1] = -1   # update direction of step
+
             else:  # step in the opposite direction to the prevoius step
                 if dir[i] == 1:
                     x -= 1
-                    dir[i+1] = -1
+                    dir[i + 1] = -1
                 else:
                     x += 1
-                    dir[i+1] = 1
+                    dir[i + 1] = 1
 
             if x in visited_sites:
-                count[i+1] = count[i] # the same as the previous count
+                count[i + 1] = count[i]   # the same as the previous count
             else:
-                count[i+1] = 1 + count[i] # update count by 1
-            
+                count[i + 1] = 1 + count[i]   # update count by 1
+
             # update visited sites
-            visited_sites[x] = visited_sites.get(x,0) + 1
+            visited_sites[x] = visited_sites.get(x, 0) + 1
         return count
 
     def average_sites_visited(self):
-        """compute the average number of distinct sites visited during 
+        """compute the average number of distinct sites visited during
         the course of n steps over n trials or walkers."""
-        arr = np.zeros((self.ntrials, self.nsteps +1))
+        arr = np.zeros((self.ntrials, self.nsteps + 1))
         for i in range(self.ntrials):
             count = self.sites_visited()
-            arr[i,:] = count
-        mean_count = np.mean(arr, axis = 0)
+            arr[i, :] = count
+        mean_count = np.mean(arr, axis=0)
         return mean_count
