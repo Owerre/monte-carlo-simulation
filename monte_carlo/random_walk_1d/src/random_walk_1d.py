@@ -36,7 +36,6 @@ class RandomWalk1D:
         x_arr = np.zeros((self.ntrials, self.nsteps + 1))
         x2_arr = np.zeros((self.ntrials, self.nsteps + 1))
         visited_sites = {}  # map visited sites to count after n steps
-
         for i in range(self.ntrials):
             x = 0   # initial position
             for j in range(self.nsteps):
@@ -64,11 +63,9 @@ class RandomWalk1D:
         """
         count = np.zeros(self.nsteps + 1)   # number of distinct visited sites
         visited_sites = {}   # # track visited sites and their count
-
         x = 0   # initial position
         count[0] = 1   # initial position counted as 1
         visited_sites[0] = 1   # initial position already visited once
-
         for i in range(self.nsteps):
             if rand() <= self.p:
                 x += 1
