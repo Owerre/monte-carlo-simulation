@@ -36,13 +36,10 @@ class PersistentRandomWalk1D:
         x_arr = np.zeros((self.ntrials, self.nsteps + 1))
         x2_arr = np.zeros((self.ntrials, self.nsteps + 1))
         visited_sites = {}  # track visited sites and their count
-
         for i in range(self.ntrials):
-            # track the direction of the last step
-            dir = np.zeros(self.nsteps + 1)
+            dir = np.zeros(self.nsteps + 1)   # direction of the last step
             x = 0   # initial position
             dir[0] = 1   # initial (previous) direction
-
             for j in range(self.nsteps):
                 # step in the same direction as the previous step
                 if rand() <= self.p:
@@ -77,17 +74,13 @@ class PersistentRandomWalk1D:
     def sites_visited(self):
         """count the number of distinct sites visited
         during the course of n steps."""
-        # track the direction of the last step
-        dir = np.zeros(self.nsteps + 1)
-        # track the no. of distinct visited sites
-        count = np.zeros(self.nsteps + 1)
-        visited_sites = {}   # track visited sites
-
         x = 0   # initial position
+        dir = np.zeros(self.nsteps + 1)   #  direction of the last step
+        count = np.zeros(self.nsteps + 1)   #  no. of distinct visited sites
+        visited_sites = {}   #  visited sites
         dir[0] = 1   # initial (previous) direction
         count[0] = 1   # initial position counted as 1
         visited_sites[0] = 1   # initial position already visited once
-
         for i in range(self.nsteps):
             # step in the same direction as the previous step
             if rand() <= self.p:
