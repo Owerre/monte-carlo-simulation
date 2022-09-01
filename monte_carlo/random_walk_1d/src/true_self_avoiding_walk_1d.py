@@ -36,15 +36,13 @@ class TrueSelfAvoidingWalk1D:
         x2_arr = np.zeros((self.ntrials, self.nsteps + 1))
         visited_sites = {}  # map visited sites to count after n steps
         for i in range(self.ntrials):
-            nv = np.zeros(
-                2 * self.nsteps + 1
-            )   # track the number of visits to x
+            nv = np.zeros(2 * self.nsteps + 1)   # number of visits to x
             x = 0   # initial position
             nv[0] = 1   # initial position counted as 1
             for j in range(self.nsteps):
-                dem = np.exp(-self.g * nv[x + 1]) + np.exp(-self.g * nv[x - 1])
+                deno = np.exp(-self.g * nv[x + 1]) + np.exp(-self.g * nv[x - 1])
                 p = (
-                    np.exp(-self.g * nv[x + 1]) / dem
+                    np.exp(-self.g * nv[x + 1]) / deno
                 )   # probability to jump to x+1
                 if rand() <= p:
                     x += 1   # step right
@@ -70,21 +68,17 @@ class TrueSelfAvoidingWalk1D:
         """count the number of distinct sites visited
         during the course of n steps.
         """
-        nv = np.zeros(2 * self.nsteps + 1)   # track number of visits to x
-        count = np.zeros(
-            self.nsteps + 1
-        )   # track no. of distinct visited sites
+        nv = np.zeros(2 * self.nsteps + 1)   # number of visits to x
+        count = np.zeros( self.nsteps + 1)   # no. of distinct visited sites
         visited_sites = {}   # track visited sites
-
         x = 0   # initial position
         nv[0] = 1   # initial position already visited once
         count[0] = 1   # initial position counted as 1
         visited_sites[0] = 1   # initial position already visited once
-
         for i in range(self.nsteps):
-            dem = np.exp(-self.g * nv[x + 1]) + np.exp(-self.g * nv[x - 1])
+            deno = np.exp(-self.g * nv[x + 1]) + np.exp(-self.g * nv[x - 1])
             p = (
-                np.exp(-self.g * nv[x + 1]) / dem
+                np.exp(-self.g * nv[x + 1]) / deno
             )   # probability to jump to x+1
             if rand() <= p:
                 x += 1   # step right
