@@ -107,7 +107,7 @@ class RandomlyDistributedTrap:
         return rp, lp
 
     def exact_enumeration_proba(self):
-        """survival probability per trap configiration
+        """survival probability per trap configuration
         using exact enumeration.
         """
         rp, lp = self.neighbor_pos(dtype=int)   # periodic boundary condition
